@@ -1,6 +1,8 @@
 FROM tensorflow/tensorflow:1.5.0-devel-gpu
 RUN apt-get update && apt-get install -y \
-  git
+  git \
+  tar \
+  wget 
 
 RUN apt-get install -y protobuf-compiler \
   python-lxml \
@@ -12,9 +14,10 @@ RUN apt-get install -y protobuf-compiler \
   libgtk-3-dev \
   libatlas-base-dev gfortran \
   python2.7-dev \
-  python-tk 
+  python-tk \
+ 
   
- RUN pip install opencv-python==3.4.0.12 requests
+ RUN pip install opencv-python==3.4.0.12 requests minio minio.error elasticsearch 
   
 
 # change to tensorflow dir
