@@ -1,38 +1,37 @@
-# pistol-detection
+# Installation
 
+This script is intended to be run from a Docker container on a machine with a dedicated GPU. Ensure you have Docker installed, or you will need to make changes to the script to run the code.
+
+Clone this repo, enter the directory, and build the image:
 ```
 git clone https://github.com/sofwerx/assault-rifle-detection.git $HOME/Documents/pistol-detection
 ```
 ```
 cd $HOME/Documents/pistol-detection
 ```
-
 ```
 docker build -t gpu_tf .
 ```
-
+Allow docker to connect to the X server:
 ```
 xhost +local:docker
 ```
-
+Run the container, with X server and GPU access, as well as mounting the relevant repository directories as volumes.
 ```
 nvidia-docker run --rm --network host --privileged -it -v ~/.Xauthority:/root/.Xauthority -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=$DISPLAY --env="QT_X11_NO_MITSHM=1" -v /dev/video0:/dev/video0  -v $HOME/Documents/pistol-detection/tf_files:/tf_files  --device /dev/snd gpu_tf bash
 ```
-
+Change working directory:
 ```
 cd object_detection
 ```
 
-For optimization, the object detection code has been split into two seperate scripts that can be run simulatenously, but should be run in seperate instances. Depending on which instance one is running, do the following:
+For optimization, the object detection code has been split into two seperate scripts that can be run simulatenously, but should be run in seperate instances. You will need to run both scripts, so copy them from the 'detect_pistol' folder.
 
 ```
-cp /detect_pistol/person-camera-session-one.py .
+cp /detect_pistol/person-camera-session-one.py . & cp /detect_pistol/person-camera-session-two.py .
 ```
-or
-```
-cp /detect_pistol/person-camera-session-two.py .
-```
-then, for both:
+Lastly, you will need to download the Faster RCNN folder and extract to your 'tensorflow/models/object_detection' directory:
+
 ```
 wget http://download.tensorflow.org/models/object_detection/faster_rcnn_resnet101_coco_2017_11_08.tar.gz
 ```
@@ -41,7 +40,7 @@ wget http://download.tensorflow.org/models/object_detection/faster_rcnn_resnet10
 tar -xvf faster_rcnn_resnet101_coco_2017_11_08.tar.gz
 ```
 
-Select Camera
+Select Camera:
 
 RECEPTION_EAST
 RECEPTION_WEST
